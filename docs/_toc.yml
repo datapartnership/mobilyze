@@ -5,3 +5,8 @@ parts:
   - caption: Literature Review & Methodology
     chapters:
       - file: docs/methodology
+  - caption: Tutorials
+    chapters:
+      - file: notebooks/tessellate.ipynb
+
+

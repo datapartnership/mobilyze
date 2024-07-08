@@ -12,8 +12,6 @@ authors = [{ name = "Development Data Group", email = "datalab@worldbank.org" }]
 classifiers = [
 	"Programming Language :: Python :: 3",
 	"Programming Language :: Python :: 3.10",
-	"Programming Language :: Python :: 3.11",
-	"Programming Language :: Python :: 3.12",
 	"Programming Language :: Python :: 3 :: Only",
 	"License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
 	"Operating System :: OS Independent",
@@ -23,7 +21,15 @@ classifiers = [
 dynamic = ["version"]
 
 requires-python = ">=3.10"
-dependencies = ["pandas>=2", "dask>=2024.1.0"]
+dependencies = [
+	"bokeh", 
+	"datashader", 
+	"h3>=3,<4",
+	"holoviews", 
+	"mobilkit>=0.2.8",
+	"scikit-mobility>=1.3.1",
+	"numpy<2",
+]
 [project.optional-dependencies]
 docs = [
 	"docutils==0.17.1",    # https://jupyterbook.org/en/stable/content/citations.html?highlight=docutils#citations-and-bibliographies
@@ -38,10 +44,10 @@ docs = [
 [tool.codespell]
 skip = 'docs/_build,docs/bibliography.bib,*.png,*.gz,*.whl'
 ignore-regex = '^\s*"image\/png":\s.*'
-ignore-words-list = ","
+ignore-words-list = "dec,"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/*"]
+packages = ["src/mobilyze"]
 
 [tool.hatch.version]
 source = "vcs"
