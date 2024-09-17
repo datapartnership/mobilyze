@@ -1,4 +1,4 @@
-# Mobilyze: Mobility Analysis
+# Mobilyze: Mobility Data Analysis
 
 ![Development Status](https://img.shields.io/badge/status-in%20development-orange)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/datapartnership/mobilyze/main.svg)](https://results.pre-commit.ci/latest/github/datapartnership/mobilyze/main)

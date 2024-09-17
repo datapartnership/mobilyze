@@ -2,9 +2,9 @@ format: jb-book
 root: README
 
 parts:
-  - caption: Literature Review & Methodology
+  - caption: API Reference
     chapters:
-      - file: docs/methodology
+      - file: api/mobilyze
   - caption: Tutorials
     chapters:
       - file: notebooks/tessellate.ipynb
