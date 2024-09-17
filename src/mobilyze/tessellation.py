@@ -6,7 +6,7 @@ from shapely.geometry import Polygon, mapping
 
 def tessellate(gdf: geopandas.GeoDataFrame, columns=["shapeName"], resolution=7):
     """
-    Tessellates the geometries in a GeoDataFrame into hexagonal cells using H3.
+    Tessellates the geometries into H3 indexes in a GeoDataFrame
 
     Parameters
     ----------
@@ -41,39 +41,59 @@ def tessellate(gdf: geopandas.GeoDataFrame, columns=["shapeName"], resolution=7)
           shapeName                                           geometry
     8a69a0f7fffffff      POLYGON ((0 0, 0.5 0, 1 0.5, 1 1, 0.5 1, 0 1, 0 0))
     """
-
     gdf = gdf.to_crs("EPSG:4326")
     mapper = dict()
 
     for idx, row in gdf.iterrows():
         geometry = row["geometry"]
+        geom_type = geometry.geom_type
 
-        match geometry.geom_type:
-            case "Polygon":
+        if geom_type == "Polygon":
+            hex_ids = h3.polyfill(
+                mapping(geometry),
+                resolution,
+                geo_json_conformant=True,
+            )
+            mapper.update([(hex_id, row[columns]) for hex_id in hex_ids])
+
+        if geom_type == "MultiPolygon":
+            for x in geometry.geoms:
                 hex_ids = h3.polyfill(
-                    mapping(geometry),
+                    mapping(x),
                     resolution,
                     geo_json_conformant=True,
                 )
+
                 mapper.update([(hex_id, row[columns]) for hex_id in hex_ids])
 
-            case "MultiPolygon":
-                for x in geometry.geoms:
-                    hex_ids = h3.polyfill(
-                        mapping(x),
-                        resolution,
-                        geo_json_conformant=True,
-                    )
+    # python>=3.10
+    # match geometry.geom_type:
+    #     case "Polygon":
+    #         hex_ids = h3.polyfill(
+    #             mapping(geometry),
+    #             resolution,
+    #             geo_json_conformant=True,
+    #         )
+    #         mapper.update([(hex_id, row[columns]) for hex_id in hex_ids])
 
-                    mapper.update([(hex_id, row[columns]) for hex_id in hex_ids])
-            case _:
-                raise (Exception)
+    #     case "MultiPolygon":
+    #         for x in geometry.geoms:
+    #             hex_ids = h3.polyfill(
+    #                 mapping(x),
+    #                 resolution,
+    #                 geo_json_conformant=True,
+    #             )
+
+    #             mapper.update([(hex_id, row[columns]) for hex_id in hex_ids])
+    #     case _:
+    #         raise (Exception)
 
     # Create dataframe containing `hex_id`
     df = pd.DataFrame.from_dict(mapper, orient="index", columns=columns)
-
-    return geopandas.GeoDataFrame(
+    gdf = geopandas.GeoDataFrame(
         df,
         geometry=[Polygon(h3.h3_to_geo_boundary(idx, True)) for idx in df.index],
         crs="EPSG:4326",
     )
+
+    return gdf
