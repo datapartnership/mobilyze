@@ -22,11 +22,11 @@ dynamic = ["version"]
 requires-python = ">=3.8,<3.10"
 dependencies = [
 	"bokeh", 
+	"dask_geopandas",
 	"dask",
 	"datashader",
 	"h3>=3,<4",
 	"holoviews", 
-	"humanize",
 	"mobilkit>=0.2.8",
 	"numpy<2",
 	"palettable>=3.3.3",
@@ -37,6 +37,7 @@ dependencies = [
 docs = [
 	"docutils==0.17.1",    # https://jupyterbook.org/en/stable/content/citations.html?highlight=docutils#citations-and-bibliographies
 	"jupyter-book>=1,<2",
+	"sphinxcontrib-apidoc>=0.4.0,<1",
 ]
 
 [project.urls]
