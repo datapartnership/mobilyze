@@ -25,7 +25,7 @@ dependencies = [
 	"dask_geopandas",
 	"dask",
 	"datashader",
-	"h3>=3,<4",
+	"h3>=3,<5",
 	"holoviews", 
 	"mobilkit>=0.2.8",
 	"numpy<2",
